@@ -1,22 +1,38 @@
+// src/components/VideoCard.jsx
+import React from "react";
+import Image from "next/image";
 import { useRouter } from "next/router";
 
 export default function VideoCard({ video }) {
   const router = useRouter();
 
+  // On thumbnail click, navigate to watch page using UUID
+  const handleClick = () => {
+    router.push(`/watch/${video.uuid}`);
+  };
+
   return (
     <div
-      className="bg-zinc-900 rounded-lg overflow-hidden shadow-md cursor-pointer"
-      onClick={() => router.push(`/watch/${video.uuid}`)}
+      className="bg-zinc-900 rounded-xl overflow-hidden shadow-lg cursor-pointer"
+      onClick={handleClick}
     >
-      <div className="relative w-full aspect-[16/9]">
-        <img
+      {/* Thumbnail Image with 9:16 aspect ratio */}
+      <div
+        className="relative w-full"
+        style={{ aspectRatio: "9 / 16", maxHeight: "80vh" }}
+      >
+        <Image
           src={video.thumbnail_url}
           alt={video.title}
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 300px"
         />
+
+        {/* Play Button Overlay (visible on hover) */}
         <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition">
           <svg
-            className="w-12 h-12 text-white"
+            className="w-10 h-10 text-white"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -24,7 +40,9 @@ export default function VideoCard({ video }) {
           </svg>
         </div>
       </div>
-      <div className="p-2 text-sm text-white">
+
+      {/* Title + Description Section */}
+      <div className="p-2 text-white text-sm">
         <h3 className="font-semibold line-clamp-2">{video.title}</h3>
         <p className="text-gray-400 text-xs mt-1">{video.description}</p>
       </div>
