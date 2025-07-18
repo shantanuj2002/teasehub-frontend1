@@ -7,16 +7,17 @@ export default function WatchPage() {
 
   const [video, setVideo] = useState(null);
 
-  useEffect(() => {
-    if (uuid) {
-      fetch("http://localhost:8080/videos")
-        .then((res) => res.json())
-        .then((data) => {
-          const selected = data.find((vid) => vid.uuid === uuid);
-          setVideo(selected);
-        });
-    }
-  }, [uuid]);
+useEffect(() => {
+  if (uuid) {
+    fetch(`http://localhost:8080/videos/${uuid}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.uuid) setVideo(data);
+        else setVideo(null); // for handling "not found"
+      });
+  }
+}, [uuid]);
+
 
   if (!video) return <p className="text-white p-4">Loading...</p>;
 
